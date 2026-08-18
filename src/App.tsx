@@ -58,7 +58,7 @@ function Hero({ onExplore }: { onExplore: () => void }) {
 function Collections({ onCatalog }: { onCatalog: () => void }) {
   return (
     <section className="collections" id="collections">
-      <h2>Две стороны<br />одной ловушки</h2>
+      <h2>Две стороны<br />одного бренда</h2>
       <div className="collection-split">
         <button className="collection-panel" onClick={onCatalog}>
           <img src={assetUrl('collection-street.png')} alt="Модель в одежде TRAPPOLA среди московской архитектуры" />
@@ -97,7 +97,7 @@ function ProductRail({ onProduct, onCatalog }: { onProduct: (p: Product) => void
 function Manifesto({ onAbout }: { onAbout: () => void }) {
   return (
     <section className="manifesto">
-      <div><h2>TRAPPOLA —<br />это ловушка</h2><p>Между улицей и ателье.<br />Между тем, что видно, и тем,<br />что остаётся внутри.</p><button onClick={onAbout}>О бренде <ArrowRight /></button></div>
+      <div><h2>TRAPPOLA —<br />между мирами</h2><p>Между улицей и ателье.<br />Между тем, что видно, и тем,<br />что остаётся внутри.</p><button onClick={onAbout}>О бренде <ArrowRight /></button></div>
       <img className="trap-art" src={assetUrl('manifesto-trap.png')} alt="" aria-hidden="true" />
     </section>
   )
@@ -144,13 +144,13 @@ function ProductPage({ product, onAdd }: { product: Product; onAdd: (product: Pr
   )
 }
 
-function About() { return <main className="inner-page text-page"><span>TRAPPOLA / Москва</span><h1>Ловушка<br />как форма<br />свободы</h1><div className="text-columns"><p>TRAPPOLA начинается на границе двух состояний: повседневной улицы и вещи, собранной почти как сценический костюм.</p><p>Первая линия — футболки и лонгсливы свободного силуэта. Затем появятся худи, брюки, костюмы, сумки, текстиль и парфюм для дома.</p></div><img src={assetUrl('collection-atelier.png')} alt="TRAPPOLA ATELIER" /></main> }
+function About() { return <main className="inner-page text-page"><span>TRAPPOLA / Москва</span><h1>Одежда<br />как форма<br />свободы</h1><div className="text-columns"><p>TRAPPOLA начинается на границе двух состояний: повседневной улицы и вещи, собранной почти как сценический костюм.</p><p>Первая линия — футболки и лонгсливы свободного силуэта. Затем появятся худи, брюки, костюмы, сумки, текстиль и парфюм для дома.</p></div><img src={assetUrl('collection-atelier.png')} alt="TRAPPOLA ATELIER" /></main> }
 
 function Delivery() { return <main className="inner-page service-page"><div className="page-intro"><span>Информация</span><h1>Доставка<br />и оплата</h1></div><div className="service-list"><section><span>01</span><h2>Оплата</h2><p>Банковской картой, через СБП, SberPay и другие способы после подключения ЮKassa. Чек придёт на электронную почту.</p></section><section><span>02</span><h2>Доставка</h2><p>По России через СДЭК. Стоимость и срок рассчитываются при оформлении заказа.</p></section><section><span>03</span><h2>Возврат</h2><p>Условия возврата будут опубликованы до начала продаж вместе с реквизитами продавца и публичной офертой.</p></section></div></main> }
 
 function CartDrawer({ cart, open, onClose, onQuantity, onCheckout }: { cart: CartLine[]; open: boolean; onClose: () => void; onQuantity: (i: number, d: number) => void; onCheckout: () => void }) {
   const total = cart.reduce((sum, x) => sum + x.product.price * x.quantity, 0)
-  return <><div className={open ? 'scrim visible' : 'scrim'} onClick={onClose} /><aside className={open ? 'cart-drawer open' : 'cart-drawer'} aria-hidden={!open}><div className="cart-head"><h2>Корзина</h2><button onClick={onClose}><X /></button></div>{cart.length === 0 ? <div className="empty-cart"><ShoppingBag /><p>Пока пусто.<br />Ловушка ещё открыта.</p></div> : <><div className="cart-lines">{cart.map((line, i) => <div className="cart-line" key={`${line.product.id}-${line.size}-${line.color}`}><ProductVisual product={line.product} /><div><strong>{line.product.name}</strong><small>{line.color} / {line.size}</small><span>{rubles(line.product.price)}</span><div className="qty"><button onClick={() => onQuantity(i, -1)}><Minus /></button><b>{line.quantity}</b><button onClick={() => onQuantity(i, 1)}><Plus /></button></div></div></div>)}</div><div className="cart-total"><span>Итого</span><strong>{rubles(total)}</strong><button onClick={onCheckout}>Оформить заказ <ArrowRight /></button></div></>}</aside></>
+  return <><div className={open ? 'scrim visible' : 'scrim'} onClick={onClose} /><aside className={open ? 'cart-drawer open' : 'cart-drawer'} aria-hidden={!open}><div className="cart-head"><h2>Корзина</h2><button onClick={onClose}><X /></button></div>{cart.length === 0 ? <div className="empty-cart"><ShoppingBag /><p>Пока пусто.<br />Выберите свою вещь.</p></div> : <><div className="cart-lines">{cart.map((line, i) => <div className="cart-line" key={`${line.product.id}-${line.size}-${line.color}`}><ProductVisual product={line.product} /><div><strong>{line.product.name}</strong><small>{line.color} / {line.size}</small><span>{rubles(line.product.price)}</span><div className="qty"><button onClick={() => onQuantity(i, -1)}><Minus /></button><b>{line.quantity}</b><button onClick={() => onQuantity(i, 1)}><Plus /></button></div></div></div>)}</div><div className="cart-total"><span>Итого</span><strong>{rubles(total)}</strong><button onClick={onCheckout}>Оформить заказ <ArrowRight /></button></div></>}</aside></>
 }
 
 function Checkout({ cart, onDone }: { cart: CartLine[]; onDone: () => void }) {
