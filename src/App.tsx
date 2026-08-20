@@ -56,25 +56,15 @@ function Hero({ onExplore }: { onExplore: () => void }) {
 }
 
 function Collections({ onCatalog }: { onCatalog: () => void }) {
-  const [streetColor, setStreetColor] = useState(false)
-
   return (
     <section className="collections" id="collections">
       <h2>Две стороны<br />одного бренда</h2>
       <div className="collection-split">
-        <div className={`collection-panel collection-panel--street${streetColor ? ' is-color' : ''}`}>
-          <button
-            type="button"
-            className="collection-image-toggle"
-            aria-label={streetColor ? 'Показать чёрно-белую фотографию коллекции TRAPPOLA' : 'Показать цветную фотографию коллекции TRAPPOLA'}
-            aria-pressed={streetColor}
-            onClick={() => setStreetColor((current) => !current)}
-          >
-            <span className="collection-image-stack">
-              <img className="collection-image collection-image--mono" src={assetUrl('collection-street.png')} alt="Модель в одежде TRAPPOLA среди московской архитектуры" />
-              <img className="collection-image collection-image--color" src={assetUrl('collection-street-color.png')} alt="" aria-hidden="true" />
-            </span>
-          </button>
+        <div className="collection-panel collection-panel--street">
+          <div className="collection-image-stack">
+            <img className="collection-image collection-image--mono" src={assetUrl('collection-street.png')} alt="Модель в одежде TRAPPOLA среди московской архитектуры" />
+            <img className="collection-image collection-image--color" src={assetUrl('collection-street-color.png')} alt="" aria-hidden="true" />
+          </div>
           <button type="button" className="collection-meta" onClick={onCatalog}><strong>TRAPPOLA</strong><small>Casual / Street</small><ArrowRight /></button>
         </div>
         <div className="collection-panel collection-panel--atelier">
