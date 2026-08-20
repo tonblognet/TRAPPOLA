@@ -40,13 +40,13 @@ function Hero({ onExplore }: { onExplore: () => void }) {
     return () => window.removeEventListener('scroll', update)
   }, [])
   return (
-    <section ref={heroRef} className="hero" aria-label="TRAPPOLA — одежда, которая не отпускает">
+    <section ref={heroRef} className="hero" aria-label="TRAPPOLA — бренд, который не отпускает">
       <div className="hero-sticky" style={{ '--jaw-progress': progress } as React.CSSProperties}>
         <div className="jaw jaw--top" />
         <div className="jaw jaw--bottom" />
         <div className="hero-copy">
           <h1>TRAPPOLA</h1>
-          <p>Одежда, которая не отпускает</p>
+          <p>Бренд, который не отпускает</p>
         </div>
         <button className="scroll-cue" onClick={onExplore}><span>Листайте</span><ArrowDown /></button>
         <div className="hero-index">MOSCOW / 2026</div>
@@ -56,18 +56,31 @@ function Hero({ onExplore }: { onExplore: () => void }) {
 }
 
 function Collections({ onCatalog }: { onCatalog: () => void }) {
+  const [streetColor, setStreetColor] = useState(false)
+
   return (
     <section className="collections" id="collections">
       <h2>Две стороны<br />одного бренда</h2>
       <div className="collection-split">
-        <button className="collection-panel" onClick={onCatalog}>
-          <img src={assetUrl('collection-street.png')} alt="Модель в одежде TRAPPOLA среди московской архитектуры" />
-          <span className="collection-meta"><strong>TRAPPOLA</strong><small>Casual / Street</small><ArrowRight /></span>
-        </button>
-        <button className="collection-panel collection-panel--atelier">
+        <div className={`collection-panel collection-panel--street${streetColor ? ' is-color' : ''}`}>
+          <button
+            type="button"
+            className="collection-image-toggle"
+            aria-label={streetColor ? 'Показать чёрно-белую фотографию коллекции TRAPPOLA' : 'Показать цветную фотографию коллекции TRAPPOLA'}
+            aria-pressed={streetColor}
+            onClick={() => setStreetColor((current) => !current)}
+          >
+            <span className="collection-image-stack">
+              <img className="collection-image collection-image--mono" src={assetUrl('collection-street.png')} alt="Модель в одежде TRAPPOLA среди московской архитектуры" />
+              <img className="collection-image collection-image--color" src={assetUrl('collection-street-color.png')} alt="" aria-hidden="true" />
+            </span>
+          </button>
+          <button type="button" className="collection-meta" onClick={onCatalog}><strong>TRAPPOLA</strong><small>Casual / Street</small><ArrowRight /></button>
+        </div>
+        <div className="collection-panel collection-panel--atelier">
           <img src={assetUrl('collection-atelier.png')} alt="Коллекция TRAPPOLA ATELIER в тёмной студии" />
           <span className="collection-meta"><strong>TRAPPOLA ATELIER</strong><small>Классика / Провокация</small><i>Скоро</i></span>
-        </button>
+        </div>
       </div>
     </section>
   )
