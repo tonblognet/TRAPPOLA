@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /TRAPPOLA/studio
+Disallow: /TRAPPOLA/checkout
+
+Sitemap: https://tonblognet.github.io/TRAPPOLA/sitemap.xml

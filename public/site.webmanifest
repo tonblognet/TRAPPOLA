@@ -1,0 +1,9 @@
+{
+  "name": "TRAPPOLA",
+  "short_name": "TRAPPOLA",
+  "start_url": "/TRAPPOLA/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": []
+}
