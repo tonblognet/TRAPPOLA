@@ -13,7 +13,11 @@ export function SiteFooter({ onNavigate }: { onNavigate: (route: Route) => void 
           <button onClick={() => onNavigate({ name: 'contacts' })}>Контакты</button>
           <button onClick={() => onNavigate({ name: 'offer' })}>Оферта</button>
         </div>
-        <address>Moscow / Russia<br /><a href="mailto:info@trappola.ru">info@trappola.ru</a></address>
+        <address>
+          Moscow / Russia<br />
+          <a href="mailto:info@trappola.ru">info@trappola.ru</a>
+          <span className="footer-seller">ИП Мельникова Елена Анатольевна<br />ИНН 773303945515</span>
+        </address>
       </div>
       <div className="footer-bottom">
         <span>© TRAPPOLA 2026</span>

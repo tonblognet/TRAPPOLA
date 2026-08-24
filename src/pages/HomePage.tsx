@@ -81,7 +81,7 @@ function ProductRail({ products, onNavigate }: { products: Product[]; onNavigate
 function Manifesto({ onNavigate }: { onNavigate: (route: Route) => void }) {
   return (
     <section className="manifesto">
-      <div><h2>TRAPPOLA —<br />между мирами</h2><p>Между улицей и ателье.<br />Между тем, что видно, и тем,<br />что остаётся внутри.</p><button onClick={() => onNavigate({ name: 'about' })}>О бренде <ArrowRight /></button></div>
+      <div><h2>TRAPPOLA —<br />ловушка между мирами</h2><p>Между улицей и ателье.<br />Между тем, что видно, и тем,<br />что остаётся внутри.</p><button onClick={() => onNavigate({ name: 'about' })}>О бренде <ArrowRight /></button></div>
       <img className="trap-art" src={assetUrl('manifesto-trap.png')} alt="" aria-hidden="true" />
     </section>
   )

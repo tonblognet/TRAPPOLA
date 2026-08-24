@@ -31,7 +31,7 @@ export function OfferPage() {
 
 export function ContactsPage() {
   useDocumentMeta({ title: 'Контакты — TRAPPOLA', description: 'Контакты бренда одежды TRAPPOLA.' })
-  return <main className="inner-page contact-page"><div className="page-intro"><span>Связь</span><h1>Контакты</h1><p>Москва, Россия<br /><a href="mailto:info@trappola.ru">info@trappola.ru</a></p></div><div className="service-list"><section><span>01</span><h2>Покупателям</h2><p>Вопросы о коллекциях, размерах, заказах и доставке: <a href="mailto:info@trappola.ru">info@trappola.ru</a>.</p></section><section><span>02</span><h2>Сотрудничество</h2><p>Контакты для съёмок, шоурумов и партнёрств будут добавлены перед запуском.</p></section></div></main>
+  return <main className="inner-page contact-page"><div className="page-intro"><span>Связь</span><h1>Контакты</h1><p>Москва, Россия<br /><a href="mailto:info@trappola.ru">info@trappola.ru</a></p></div><div className="service-list"><section><span>01</span><h2>Покупателям</h2><p>Вопросы о коллекциях, размерах, заказах и доставке: <a href="mailto:info@trappola.ru">info@trappola.ru</a>.</p></section><section><span>02</span><h2>Продавец</h2><p>ИП Мельникова Елена Анатольевна<br />ИНН 773303945515</p></section><section><span>03</span><h2>Сотрудничество</h2><p>Контакты для съёмок, шоурумов и партнёрств будут добавлены перед запуском.</p></section></div></main>
 }
 
 export function NotFoundPage({ onNavigate }: { onNavigate: (route: Route) => void }) {
