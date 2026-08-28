@@ -13,8 +13,12 @@ type Props = {
 }
 
 export function ProductPage({ product, onAdd }: Props) {
-  const [size, setSize] = useState(product.sizes[0])
-  const [color, setColor] = useState(product.colors[0])
+  const activeVariants = product.variants?.filter((variant) => variant.active) ?? []
+  const sizes = activeVariants.length ? [...new Set(activeVariants.map((variant) => variant.size))] : product.sizes
+  const [size, setSize] = useState(sizes[0] ?? '')
+  const colors = activeVariants.length ? [...new Set(activeVariants.filter((variant) => variant.size === size).map((variant) => variant.color))] : product.colors
+  const [color, setColor] = useState(colors[0] ?? '')
+  const selectedColor = colors.includes(color) ? color : (colors[0] ?? '')
   const [added, setAdded] = useState(false)
   useDocumentMeta({ title: `${product.name} — TRAPPOLA`, description: product.description })
 
@@ -23,20 +27,21 @@ export function ProductPage({ product, onAdd }: Props) {
   }, [product])
 
   const add = () => {
-    onAdd(product, size, color)
+    onAdd(product, size, selectedColor)
     setAdded(true)
     window.setTimeout(() => setAdded(false), 1600)
   }
 
-  const available = product.stock > 0 && product.status === 'active'
+  const selectedVariant = activeVariants.find((variant) => variant.size === size && variant.color === selectedColor)
+  const available = product.status === 'active' && (selectedVariant ? selectedVariant.stock > 0 : product.stock > 0)
 
   return (
     <main className="inner-page product-page">
       <div className="product-page__visual"><ProductVisual product={product} /><span>TRAPPOLA / {product.collection}</span></div>
       <div className="product-page__info">
         <span>Артикул {product.sku}</span><h1>{product.name}</h1><p className="price">{rubles(product.price)}</p><p className="description">{product.description}</p>
-        <fieldset><legend>Размер</legend><div>{product.sizes.map((item) => <button type="button" className={size === item ? 'selected' : ''} onClick={() => setSize(item)} key={item}>{item}</button>)}</div></fieldset>
-        <fieldset><legend>Цвет</legend><div>{product.colors.map((item) => <button type="button" className={color === item ? 'selected' : ''} onClick={() => setColor(item)} key={item}>{item}</button>)}</div></fieldset>
+        <fieldset><legend>Размер</legend><div>{sizes.map((item) => <button type="button" className={size === item ? 'selected' : ''} onClick={() => setSize(item)} disabled={activeVariants.length > 0 && !activeVariants.some((variant) => variant.size === item && variant.stock > 0)} key={item}>{item}</button>)}</div></fieldset>
+        <fieldset><legend>Цвет</legend><div>{colors.map((item) => <button type="button" className={selectedColor === item ? 'selected' : ''} onClick={() => setColor(item)} disabled={activeVariants.length > 0 && !activeVariants.some((variant) => variant.size === size && variant.color === item && variant.stock > 0)} key={item}>{item}</button>)}</div></fieldset>
         <button className="add-button" onClick={add} disabled={!available}>{available ? (added ? <><Check /> Добавлено</> : <>Добавить в корзину <ShoppingBag /></>) : <>Нет в наличии</>}</button>
         <dl>
           <div><dt>Состав</dt><dd>{product.composition}</dd></div>

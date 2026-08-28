@@ -15,6 +15,7 @@ export const routeFromPath = (pathname: string, base = '/'): Route => {
   if (path === 'offer') return { name: 'offer' }
   if (path === 'checkout') return { name: 'checkout' }
   if (path === 'studio') return { name: 'studio' }
+  if (path === 'admin') return { name: 'admin' }
   if (path.startsWith('product/')) return { name: 'product', slug: decodeURIComponent(path.slice('product/'.length)) }
   return { name: 'not-found' }
 }

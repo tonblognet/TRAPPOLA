@@ -2,7 +2,6 @@ import { useState, type FormEvent } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
 import type { CartLine, OrderCustomer, OrderRecord, ResolvedCartLine, Route } from '../types'
 import { cartTotal } from '../lib/cart'
-import { createOrder } from '../lib/orders'
 import { track } from '../lib/analytics'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
@@ -13,25 +12,35 @@ const emptyCustomer: OrderCustomer = { name: '', phone: '', email: '', city: '',
 type Props = {
   cart: CartLine[]
   resolvedCart: ResolvedCartLine[]
-  onOrder: (order: OrderRecord) => void
+  apiMode: boolean
+  onOrder: (customer: OrderCustomer) => Promise<OrderRecord>
   onNavigate: (route: Route) => void
 }
 
-export function CheckoutPage({ cart, resolvedCart, onOrder, onNavigate }: Props) {
+export function CheckoutPage({ cart, resolvedCart, apiMode, onOrder, onNavigate }: Props) {
   const [customer, setCustomer] = useState(emptyCustomer)
   const [agreed, setAgreed] = useState(false)
   const [submittedOrder, setSubmittedOrder] = useState<OrderRecord | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const total = cartTotal(resolvedCart)
   useDocumentMeta({ title: 'Оформление заказа — TRAPPOLA', description: 'Оформление заказа TRAPPOLA.', noIndex: true })
 
   const update = (field: keyof OrderCustomer, value: string) => setCustomer((current) => ({ ...current, [field]: value }))
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault()
     if (!agreed || cart.length === 0) return
-    const order = createOrder(customer, cart, total)
-    onOrder(order)
-    setSubmittedOrder(order)
-    track('order_submitted', { order_id: order.id, total })
+    setSubmitting(true)
+    setError('')
+    try {
+      const order = await onOrder(customer)
+      setSubmittedOrder(order)
+      track('order_submitted', { order_id: order.id, total: order.total })
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : 'Не удалось оформить заказ')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (submittedOrder) {
@@ -39,7 +48,7 @@ export function CheckoutPage({ cart, resolvedCart, onOrder, onNavigate }: Props)
       <main className="checkout-success">
         <Check />
         <h1>Заказ<br />сохранён</h1>
-        <p>Номер заявки: <strong>{submittedOrder.id}</strong>. Сейчас это безопасный демонстрационный режим: данные сохранены только в этом браузере, деньги не списаны.</p>
+        <p>Номер заявки: <strong>{submittedOrder.number ?? submittedOrder.id}</strong>. {apiMode ? 'Заявка передана магазину. Оплата пока не списана — менеджер свяжется с вами.' : 'Сейчас это безопасный демонстрационный режим: данные сохранены только в этом браузере, деньги не списаны.'}</p>
         <button onClick={() => onNavigate({ name: 'home' })}>Вернуться на главную</button>
       </main>
     )
@@ -67,7 +76,8 @@ export function CheckoutPage({ cart, resolvedCart, onOrder, onNavigate }: Props)
           <label>Адрес или пункт выдачи<input required autoComplete="street-address" value={customer.address} onChange={(event) => update('address', event.target.value)} /></label>
           <label>Комментарий<textarea value={customer.comment} onChange={(event) => update('comment', event.target.value)} /></label>
           <label className="consent-field"><input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} /> <span>Согласен с <button type="button" onClick={() => onNavigate({ name: 'privacy' })}>политикой конфиденциальности</button> и условиями обработки заявки.</span></label>
-          <button type="submit" disabled={!agreed}>Сохранить тестовый заказ <ArrowRight /></button>
+          {error ? <p className="checkout-error" role="alert">{error}</p> : null}
+          <button type="submit" disabled={!agreed || submitting}>{submitting ? 'Отправляем…' : apiMode ? 'Отправить заказ' : 'Сохранить тестовый заказ'} <ArrowRight /></button>
         </form>
       </div>
       <aside>

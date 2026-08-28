@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+dist
+server-dist
+uploads
+backups
+.env
+.env.*
+!.env.example
+test-results
+tmp
+output
+design
+*.tsbuildinfo
